@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Sabiha! 🎀</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:    #FF6FA8;
+      --rose:    #FF3E7F;
+      --lilac:   #C97BEA;
+      --peach:   #FFB347;
+      --cream:   #FFF5F9;
+      --white:   #FFFFFF;
+      --text:    #3D1A3A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E🎀%3C/text%3E%3C/svg%3E") 12 12, auto;
+    }
+
+    /* ── FLOATING CONFETTI ── */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1.5rem 3rem;
+      z-index: 1;
+      background: radial-gradient(ellipse at 50% 0%, #ffdcee 0%, var(--cream) 70%);
+    }
+
+    .bow {
+      font-size: clamp(4rem, 14vw, 8rem);
+      animation: bounce 1.6s ease-in-out infinite;
+      display: block;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 4px 16px #ff6fa888);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50%       { transform: translateY(-18px) rotate(5deg); }
+    }
+
+    .hero h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2.4rem, 9vw, 6rem);
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--rose), var(--lilac), var(--peach));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
+      font-weight: 700;
+      color: var(--lilac);
+      letter-spacing: 0.04em;
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+
+    .hero .message {
+      margin-top: 1.8rem;
+      max-width: 520px;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 600;
+      color: #7a3060;
+      line-height: 1.7;
+      animation: fadeUp 0.9s 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-hint {
+      margin-top: 2.5rem;
+      font-size: 0.9rem;
+      color: var(--pink);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      animation: fadeUp 0.9s 0.8s ease both, pulse 2s 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ── REVEAL SECTION ── */
+    .reveal {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      padding: 4rem 1.5rem 5rem;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 2.5rem;
+      padding: 2.5rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 8px 40px #ff6fa822, 0 2px 8px #c97bea18;
+      transform: translateY(40px);
+      opacity: 0;
+      transition: transform 0.7s cubic-bezier(.22,1,.36,1), opacity 0.7s ease;
+      text-align: center;
+    }
+    .card.visible { transform: translateY(0); opacity: 1; }
+
+    .card .emoji { font-size: 3rem; margin-bottom: 0.8rem; display: block; }
+    .card h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.6rem;
+      color: var(--rose);
+      margin-bottom: 0.7rem;
+    }
+    .card p {
+      font-size: 1.05rem;
+      color: #7a3060;
+      font-weight: 600;
+      line-height: 1.7;
+    }
+
+    /* ── CAKE SECTION ── */
+    .cake-section {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 1rem 5rem;
+    }
+
+    .cake-section h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      color: var(--rose);
+      margin-bottom: 2rem;
+    }
+
+    .cake-wrap {
+      display: inline-block;
+      position: relative;
+    }
+
+    .cake {
+      font-size: clamp(6rem, 20vw, 10rem);
+      display: block;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 8px 24px #ffb34755);
+      user-select: none;
+    }
+    .cake:hover { transform: scale(1.12) rotate(-4deg); }
+    .cake:active { transform: scale(0.95); }
+
+    .click-hint {
+      font-size: 0.95rem;
+      color: var(--lilac);
+      font-weight: 700;
+      margin-top: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    #wish-text {
+      margin-top: 1.5rem;
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      color: var(--rose);
+      min-height: 2.5rem;
+      transition: opacity 0.4s;
+    }
+
+    /* ── SPARKLE BURST ── */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.8rem;
+      z-index: 999;
+      animation: sparkle-out 0.9s ease forwards;
+    }
+    @keyframes sparkle-out {
+      0%   { transform: translate(-50%,-50%) scale(0.2) rotate(0deg); opacity: 1; }
+      60%  { opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(1.4) rotate(360deg) translateY(-80px); opacity: 0; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      font-size: 1rem;
+      color: var(--lilac);
+      font-weight: 700;
+    }
+
+    /* ── BALLOON FLOATERS ── */
+    .balloon {
+      position: fixed;
+      font-size: 2.4rem;
+      pointer-events: none;
+      animation: float-up linear forwards;
+      z-index: 0;
+    }
+    @keyframes float-up {
+      0%   { transform: translateY(110vh) rotate(-8deg); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(8deg); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="bow">🎀</span>
+  <h1>Happy Birthday<br>Sabiha!</h1>
+  <p class="subtitle">✨ Today is YOUR day ✨</p>
+  <p class="message">
+    You're not just a year older — you're a year more wonderful, more magical,
+    and more loved than ever before. 💕
+  </p>
+  <p class="scroll-hint">↓ keep scrolling ↓</p>
+</section>
+
+<!-- REVEAL CARDS -->
+<section class="reveal" id="reveal">
+  <div class="card" data-delay="0">
+    <span class="emoji">🌸</span>
+    <h2>You are one of a kind</h2>
+    <p>The world is literally a better place because you're in it. Don't let anyone tell you otherwise!</p>
+  </div>
+  <div class="card" data-delay="150">
+    <span class="emoji">💫</span>
+    <h2>Dream big, sis!</h2>
+    <p>May every single wish you've ever whispered to yourself come true this year and beyond.</p>
+  </div>
+  <div class="card" data-delay="300">
+    <span class="emoji">🎁</span>
+    <h2>The best is yet to come</h2>
+    <p>Life has so many beautiful chapters waiting for you. This birthday marks the start of the most amazing one yet.</p>
+  </div>
+</section>
+
+<!-- INTERACTIVE CAKE -->
+<section class="cake-section">
+  <h2>Make a Wish! 🕯️</h2>
+  <div class="cake-wrap">
+    <span class="cake" id="cake" role="button" aria-label="Click the cake to make a wish" tabindex="0">🎂</span>
+  </div>
+  <p class="click-hint">tap the cake 🎂</p>
+  <p id="wish-text"></p>
+</section>
+
+<footer>
+  Made with 💕 just for Sabiha &nbsp;·&nbsp; Have the most beautiful birthday ever! 🎀
+</footer>
+
+<script>
+  /* ── CONFETTI ── */
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, pieces = [];
+  const COLORS = ['#FF6FA8','#FF3E7F','#C97BEA','#FFB347','#FFD6EC','#FFF'];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function randomPiece() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * -H,
+      r: Math.random() * 7 + 4,
+      d: Math.random() * 40 + 10,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      tilt: Math.random() * 20 - 10,
+      tiltAngle: 0,
+      tiltAngleInc: Math.random() * 0.07 + 0.05,
+      shape: Math.random() > 0.5 ? 'circle' : 'rect',
+    };
+  }
+
+  for (let i = 0; i < 80; i++) {
+    const p = randomPiece();
+    p.y = Math.random() * H; // start scattered
+    pieces.push(p);
+  }
+
+  function drawPiece(p) {
+    ctx.beginPath();
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = 0.75;
+    if (p.shape === 'circle') {
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    } else {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.tilt * Math.PI) / 180);
+      ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+      ctx.restore();
+    }
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  let angle = 0;
+  function animateConfetti() {
+    ctx.clearRect(0, 0, W, H);
+    angle += 0.008;
+    pieces.forEach(p => {
+      p.tiltAngle += p.tiltAngleInc;
+      p.y += (Math.cos(angle + p.d) + 1.2);
+      p.x += Math.sin(angle) * 0.6;
+      p.tilt = Math.sin(p.tiltAngle) * 15;
+      if (p.y > H + 20) { p.y = -10; p.x = Math.random() * W; }
+      drawPiece(p);
+    });
+    requestAnimationFrame(animateConfetti);
+  }
+  animateConfetti();
+
+  /* ── SCROLL REVEAL ── */
+  const cards = document.querySelectorAll('.card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const delay = parseInt(e.target.dataset.delay || 0);
+        setTimeout(() => e.target.classList.add('visible'), delay);
+      }
+    });
+  }, { threshold: 0.15 });
+  cards.forEach(c => observer.observe(c));
+
+  /* ── CAKE WISHES ── */
+  const wishes = [
+    "May all your dreams come true! 🌟",
+    "Wishing you endless happiness! 💕",
+    "You deserve all the love in the world! 🌸",
+    "This is YOUR year, Sabiha! ✨",
+    "Stay as amazing as you are! 🎀",
+    "Happiness follows you everywhere! 🦋",
+    "Keep shining bright, superstar! ⭐",
+    "Joy, laughter & love — always! 🎊",
+  ];
+  let wishIdx = 0;
+  const wishText = document.getElementById('wish-text');
+  const cakeEl = document.getElementById('cake');
+
+  const sparkleEmojis = ['✨','⭐','💫','🌟','🎉','💕','🎀','🌸'];
+
+  function spawnSparkles(x, y) {
+    for (let i = 0; i < 8; i++) {
+      const el = document.createElement('span');
+      el.className = 'sparkle';
+      el.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+      const angle = (Math.PI * 2 * i) / 8;
+      const dist = 60 + Math.random() * 40;
+      el.style.left = (x + Math.cos(angle) * dist) + 'px';
+      el.style.top  = (y + Math.sin(angle) * dist) + 'px';
+      el.style.animationDelay = (i * 40) + 'ms';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }
+  }
+
+  function onCakeClick(e) {
+    const rect = cakeEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top  + rect.height / 2;
+    spawnSparkles(cx, cy);
+    wishText.style.opacity = 0;
+    setTimeout(() => {
+      wishText.textContent = wishes[wishIdx % wishes.length];
+      wishText.style.opacity = 1;
+      wishIdx++;
+    }, 250);
+    launchBalloons();
+  }
+
+  cakeEl.addEventListener('click', onCakeClick);
+  cakeEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') onCakeClick(e); });
+
+  /* ── BALLOON BURST ── */
+  const balloonEmojis = ['🎈','🎀','🌸','💜','💗','🎊'];
+  function launchBalloons() {
+    for (let i = 0; i < 6; i++) {
+      setTimeout(() => {
+        const el = document.createElement('span');
+        el.className = 'balloon';
+        el.textContent = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
+        el.style.left = (10 + Math.random() * 80) + 'vw';
+        el.style.animationDuration = (3 + Math.random() * 2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 5500);
+      }, i * 120);
+    }
+  }
+
+  /* ── CLICK ANYWHERE SPARKLE ── */
+  document.addEventListener('click', function(e) {
+    if (e.target === cakeEl) return;
+    const el = document.createElement('span');
+    el.className = 'sparkle';
+    el.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+    el.style.left = e.clientX + 'px';
+    el.style.top  = e.clientY + 'px';
+    el.style.fontSize = '1.4rem';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 950);
+  });
+</script>
+</body>
+</html>
